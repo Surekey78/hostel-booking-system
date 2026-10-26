@@ -1,0 +1,20 @@
+# Hostel Room Booking System — Apache hardening (optional, for XAMPP/LAMP deploys)
+
+# Do not list directory contents
+Options -Indexes
+
+# Block direct web access to internals
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(includes|uploads|database)(/|$) - [F,L]
+</IfModule>
+
+<FilesMatch "\.(sql|md|log|ini|json)$">
+  Require all denied
+</FilesMatch>
+
+# Sensible PHP upload limits for supporting documents
+<IfModule mod_php.c>
+  php_value upload_max_filesize 4M
+  php_value post_max_size 8M
+</IfModule>
