@@ -1,7 +1,7 @@
 <?php
-/**
- * admin/application-view.php - Full application record with approve / reject / assign controls.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 
@@ -118,7 +118,7 @@ page_header('Application ' . e($b['reference_no']), 'applications', e($b['full_n
 
 <div class="grid" style="grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:24px;align-items:start">
   <div class="stack">
-    <!-- Decision panel -->
+    
     <div class="card card-pad-lg" style="box-shadow:var(--e2)">
       <div class="card-header">
         <div>
@@ -194,7 +194,7 @@ page_header('Application ' . e($b['reference_no']), 'applications', e($b['full_n
       <?php endif; ?>
     </div>
 
-    <!-- Application detail -->
+    
     <div class="card card-pad-lg">
       <div class="card-header">
         <div>
@@ -215,7 +215,7 @@ page_header('Application ' . e($b['reference_no']), 'applications', e($b['full_n
       <div class="row wrap mt-2" style="gap:6px"><?= facility_chips($b['type_facilities']) ?></div>
     </div>
 
-    <!-- Applicant -->
+    
     <div class="card card-pad-lg">
       <div class="card-header">
         <div>
@@ -261,7 +261,7 @@ page_header('Application ' . e($b['reference_no']), 'applications', e($b['full_n
       <?php endif; ?>
     </div>
 
-    <!-- Documents -->
+    
     <div class="card card-pad-lg">
       <div class="card-header">
         <div>
@@ -293,7 +293,7 @@ page_header('Application ' . e($b['reference_no']), 'applications', e($b['full_n
     </div>
   </div>
 
-  <!-- Sidebar -->
+  
   <aside class="stack" style="position:sticky;top:96px">
     <?php if ($b['room_number']): ?>
       <div class="card" style="background:linear-gradient(135deg,var(--md-primary),var(--md-tertiary));color:#fff">

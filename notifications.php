@@ -1,7 +1,7 @@
 <?php
-/**
- * notifications.php - Full notification inbox (used by both students and admins).
- */
+
+
+
 require_once __DIR__ . '/includes/header.php';
 $me   = require_login();
 $uid  = (int)$me['id'];
@@ -36,10 +36,10 @@ $notifs = db_all($conn, $sql, $types, $params);
 $unread = unread_notification_count($uid);
 $total  = (int)(db_one($conn, 'SELECT COUNT(*) c FROM notifications WHERE user_id = ?', 'i', [$uid])['c'] ?? 0);
 
-// Opening the inbox marks everything read after rendering (so badges are honest).
+
 page_header('Notifications', 'notifications', $unread . ' unread of ' . $total);
 
-// Mark as read now that the page has been served to the user's screen.
+
 mark_notifications_read($uid);
 ?>
 

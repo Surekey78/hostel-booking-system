@@ -1,7 +1,7 @@
 <?php
-/**
- * index.php - Public landing page (Material You marketing surface).
- */
+
+
+
 require_once __DIR__ . '/includes/public_header.php';
 
 $hostels = db_all($conn, 'SELECT * FROM v_hostel_occupancy ORDER BY block_code');
@@ -19,7 +19,7 @@ public_head('Hostel Accommodation, Simplified');
 landing_nav();
 ?>
 
-<!-- ================= HERO ================= -->
+
 <section class="section" style="padding-top:44px">
   <div class="container">
     <div class="hero hero-primary anim-rise">
@@ -77,7 +77,7 @@ landing_nav();
   </div>
 </section>
 
-<!-- ================= HOSTELS ================= -->
+
 <section class="section" id="hostels">
   <div class="container">
     <div class="row-between mb-3">
@@ -128,7 +128,7 @@ landing_nav();
   </div>
 </section>
 
-<!-- ================= HOW IT WORKS ================= -->
+
 <section class="section" id="how" style="background:var(--md-surface-container)">
   <div class="container">
     <div class="text-center mb-4">
@@ -158,7 +158,7 @@ landing_nav();
   </div>
 </section>
 
-<!-- ================= ROOM TYPES / PRICING ================= -->
+
 <section class="section" id="pricing">
   <div class="container">
     <div class="text-center mb-4">
@@ -198,7 +198,7 @@ landing_nav();
   </div>
 </section>
 
-<!-- ================= FEATURES ================= -->
+
 <section class="section" style="background:linear-gradient(135deg,var(--md-primary) 0%,#533F8C 50%,var(--md-tertiary) 100%);color:#fff;position:relative;overflow:hidden">
   <span class="blur-shape" style="width:400px;height:400px;background:rgba(255,255,255,.14);top:-140px;left:-100px" aria-hidden="true"></span>
   <span class="blur-shape" style="width:320px;height:320px;background:rgba(232,222,248,.20);bottom:-140px;right:-60px" aria-hidden="true"></span>
@@ -225,7 +225,7 @@ landing_nav();
   </div>
 </section>
 
-<!-- ================= FAQ ================= -->
+
 <section class="section" id="faq">
   <div class="container" style="max-width:860px">
     <h2 class="headline-l text-center">Frequently asked questions</h2>
@@ -251,7 +251,7 @@ landing_nav();
   </div>
 </section>
 
-<!-- ================= FINAL CTA ================= -->
+
 <section class="section-tight">
   <div class="container">
     <div class="hero" style="border-radius:var(--r-3xl);background:var(--md-surface-container);position:relative;overflow:hidden">

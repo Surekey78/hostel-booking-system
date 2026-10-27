@@ -1,8 +1,8 @@
 <?php
-/**
- * Public-facing shared header/footer for the landing + auth pages.
- * These pages do not use the navigation rail.
- */
+
+
+
+
 require_once __DIR__ . '/functions.php';
 
 function public_head(string $title, string $bodyClass = ''): void
@@ -34,7 +34,7 @@ function public_foot(): void
     <?php
 }
 
-/** The marketing top navigation bar. */
+
 function landing_nav(): void
 {
     $user = current_user();

@@ -1,7 +1,7 @@
 <?php
-/**
- * admin/students.php - Student directory, application history per student, suspend/activate.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 

@@ -1,8 +1,8 @@
 <?php
-/**
- * student/apply.php - Submit a hostel booking request / accommodation application.
- *                     Supports optional supporting-document uploads.
- */
+
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_student();
 $uid = (int)$me['id'];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $old['preferred_room'] = (int)$old['preferred_room'];
     $old['roommates']      = max(0, (int)$old['roommates']);
 
-    // ---------- validation ----------
+    
     $hostel = db_one($conn, 'SELECT * FROM hostels WHERE id = ? AND is_active = 1', 'i', [$old['hostel_id']]);
     $type   = db_one($conn, 'SELECT * FROM room_types WHERE id = ?', 'i', [$old['room_type_id']]);
 
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['special_request'] = 'Please keep your request under 1000 characters.';
     }
 
-    // duplicate open application for the same period + block + type
+    
     $dupe = db_one(
         $conn,
         "SELECT id, reference_no FROM bookings
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['form'] = 'You already have an open application (' . $dupe['reference_no'] . ') for this block, room type and intake period.';
     }
 
-    // ---------- insert ----------
+    
     if (!$errors) {
         $ref     = next_reference();
         $status  = 'pending';
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         $bookingId = mysqli_insert_id($conn);
 
-        // ---------- documents ----------
+        
         $uploaded = 0;
         if (!empty($_FILES['documents']['name'][0])) {
             $files = $_FILES['documents'];
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Rooms of the pre-selected hostel/type (for the preferred-room dropdown)
+
 $roomChoices = [];
 if ($preHostel > 0 && $preType > 0) {
     $roomChoices = db_all(
@@ -169,7 +169,7 @@ page_header('New Application', 'apply', 'Hostel booking request / accommodation 
       <div class="alert alert-danger mb-2"><?= icon('error') ?><span><?= e($errors['form']) ?></span></div>
     <?php endif; ?>
 
-    <!-- Step 1 -->
+    
     <div class="card card-pad-lg mb-3 anim-rise">
       <div class="row mb-2" style="gap:12px">
         <span class="step-badge" style="width:40px;height:40px;font-size:1rem;border-radius:14px">1</span>
@@ -226,7 +226,7 @@ page_header('New Application', 'apply', 'Hostel booking request / accommodation 
       </div>
     </div>
 
-    <!-- Step 2 -->
+    
     <div class="card card-pad-lg mb-3 anim-rise anim-rise-1">
       <div class="row mb-2" style="gap:12px">
         <span class="step-badge" style="width:40px;height:40px;font-size:1rem;border-radius:14px">2</span>
@@ -272,7 +272,7 @@ page_header('New Application', 'apply', 'Hostel booking request / accommodation 
       </div>
     </div>
 
-    <!-- Step 3 -->
+    
     <div class="card card-pad-lg mb-3 anim-rise anim-rise-2">
       <div class="row mb-2" style="gap:12px">
         <span class="step-badge" style="width:40px;height:40px;font-size:1rem;border-radius:14px">3</span>
@@ -304,7 +304,7 @@ page_header('New Application', 'apply', 'Hostel booking request / accommodation 
       <button type="button" class="btn btn-text btn-sm mt-1" id="add-doc"><?= icon('add', 'icon icon-sm') ?> Add another document</button>
     </div>
 
-    <!-- Step 4 -->
+    
     <div class="card card-pad-lg anim-rise anim-rise-3">
       <div class="row mb-2" style="gap:12px">
         <span class="step-badge" style="width:40px;height:40px;font-size:1rem;border-radius:14px">4</span>
@@ -327,7 +327,7 @@ page_header('New Application', 'apply', 'Hostel booking request / accommodation 
     </div>
   </form>
 
-  <!-- Sidebar -->
+  
   <aside class="stack" style="position:sticky;top:96px">
     <div class="card">
       <h3 class="card-title mb-2">Applicant</h3>
@@ -375,7 +375,7 @@ document.getElementById('add-doc').addEventListener('click', function () {
   row.querySelectorAll('select, input').forEach(function (el) { if (el.type === 'file') el.value = ''; });
   wrap.appendChild(row);
 });
-// Refresh the preferred-room list when block/type change (client-side reload keeps it simple + correct)
+
 (function () {
   var h = document.getElementById('hostel_id'), t = document.getElementById('room_type_id');
   function reload() {

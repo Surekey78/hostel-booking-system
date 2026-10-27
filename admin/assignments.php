@@ -1,7 +1,7 @@
 <?php
-/**
- * admin/assignments.php - Room-assignment records created from approved applications.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 
@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 mysqli_begin_transaction($conn);
                 try {
-                    // release old bed
+                    
                     $old = db_one($conn, "SELECT r.*, rt.capacity FROM rooms r JOIN room_types rt ON rt.id=r.room_type_id WHERE r.id=?", 'i', [(int)$asg['room_id']]);
                     $oldOcc = max(0, (int)$old['occupied'] - 1);
                     $oldStatus = $oldOcc >= (int)$old['capacity'] ? 'full' : 'available';
                     db_exec($conn, 'UPDATE rooms SET occupied=?, status=? WHERE id=?', 'isi', [$oldOcc, $oldStatus, (int)$old['id']]);
                     db_exec($conn, "UPDATE assignments SET status='transferred', checkout_date=CURDATE() WHERE id=?", 'i', [(int)$asg['id']]);
 
-                    // take the new bed
+                    
                     $newOcc = (int)$target['occupied'] + 1;
                     $newStatus = $newOcc >= (int)$target['capacity'] ? 'full' : 'available';
                     db_exec($conn, 'UPDATE rooms SET occupied=?, status=? WHERE id=?', 'isi', [$newOcc, $newStatus, $targetRoom]);
@@ -255,7 +255,7 @@ page_header('Room Assignments', 'assignments', 'Approved applications converted 
   </div>
 <?php endif; ?>
 
-<!-- Transfer modal -->
+
 <div class="modal" data-modal id="transfer-modal">
   <div class="modal-backdrop" data-close-modal></div>
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="transfer-title">

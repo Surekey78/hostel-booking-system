@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# setup.sh — one-command bootstrap for the sandbox / a fresh Linux box.
-# Creates the DB + user, imports schema & demo data, then starts the dev server.
 set -e
 cd "$(dirname "$0")"
 

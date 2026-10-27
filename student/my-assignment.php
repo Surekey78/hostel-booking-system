@@ -1,7 +1,7 @@
 <?php
-/**
- * student/my-assignment.php - The student's current room assignment record.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me  = require_student();
 $uid = (int)$me['id'];

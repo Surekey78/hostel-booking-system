@@ -1,9 +1,9 @@
 <?php
-/**
- * document.php - Authorised download of an uploaded supporting document.
- * The uploads folder sits outside the web-served tree logic of the app and is
- * never linked directly; access is checked against the session user.
- */
+
+
+
+
+
 require_once __DIR__ . '/includes/functions.php';
 
 $me = require_login();
@@ -16,7 +16,7 @@ if (!$doc) {
     exit('Document not found.');
 }
 
-// Owner (student), uploader, or any administrator may download.
+
 $allowed = is_admin() || (int)$doc['uploaded_by'] === (int)$me['id'] || (int)$doc['booking_owner'] === (int)$me['id'];
 if (!$allowed) {
     http_response_code(403);

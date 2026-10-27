@@ -1,7 +1,7 @@
 <?php
-/**
- * register.php - Student self-registration (accommodation account).
- */
+
+
+
 require_once __DIR__ . '/includes/public_header.php';
 
 if (is_logged_in()) {
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password  = (string)($_POST['password'] ?? '');
     $password2 = (string)($_POST['password_confirm'] ?? '');
 
-    // ---- Validation ----
+    
     if (mb_strlen($old['full_name']) < 3) {
         $errors['full_name'] = 'Enter your full name (at least 3 characters).';
     }
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['agree'] = 'You must accept the hostel accommodation policy.';
     }
 
-    // ---- Uniqueness ----
+    
     if (!$errors) {
         $dup = db_one($conn, 'SELECT id, email, student_id FROM users WHERE email = ? OR student_id = ? LIMIT 1', 'ss', [$old['email'], $old['student_id']]);
         if ($dup) {
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'student/hostels.php'
         );
 
-        // Let administrators know a new student registered.
+        
         foreach (db_all($conn, "SELECT id FROM users WHERE role = 'admin'") as $adm) {
             notify((int)$adm['id'], 'New student registered', $old['full_name'] . ' (' . $old['student_id'] . ') created a student account.', 'info', 'admin/students.php');
         }

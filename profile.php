@@ -1,7 +1,7 @@
 <?php
-/**
- * profile.php - Shared profile page (students edit academic details, admins edit contact details).
- */
+
+
+
 require_once __DIR__ . '/includes/header.php';
 $me   = require_login();
 $uid  = (int)$me['id'];

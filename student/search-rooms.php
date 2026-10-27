@@ -1,25 +1,25 @@
 <?php
-/**
- * student/search-rooms.php - Search & filter rooms by hostel block, room type,
- *                            price, capacity or availability.
- */
+
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_student();
 
-// ---- Filter inputs (all optional) -----------------------------------------
+
 $q         = get_str('q');
 $hostelId  = get_int('hostel');
 $typeId    = get_int('type');
 $minPrice  = get_int('min_price');
 $maxPrice  = get_int('max_price');
 $capacity  = get_int('capacity');
-$avail     = get_str('avail');                       // ''|vacant|full|maintenance
+$avail     = get_str('avail');                       
 $floor     = get_int('floor');
 $sortBy    = safe_choice(get_str('sort'), ['price_asc', 'price_desc', 'capacity_asc', 'vacancy_desc', 'room_asc'], 'vacancy_desc');
 $perPage   = 12;
 $page      = max(1, get_int('page', 1));
 
-// ---- Build the WHERE clause with bound parameters -------------------------
+
 $where  = ['1=1'];
 $types  = '';
 $params = [];
@@ -72,7 +72,7 @@ $types_  = room_type_options();
 $floors  = db_all($conn, 'SELECT DISTINCT floor FROM rooms ORDER BY floor');
 $maxP    = (int)(db_one($conn, 'SELECT COALESCE(MAX(price),0) p FROM room_types')['p'] ?? 0);
 
-// Preserve the query string for pagination + reset links.
+
 $queryBase = http_build_query(array_filter([
     'q' => $q, 'hostel' => $hostelId ?: '', 'type' => $typeId ?: '', 'min_price' => $minPrice ?: '',
     'max_price' => $maxPrice ?: '', 'capacity' => $capacity ?: '', 'avail' => $avail, 'floor' => $floor ?: '', 'sort' => $sortBy,
@@ -91,7 +91,7 @@ $activeFilters = array_filter([
 page_header('Find a Room', 'search-rooms', $total . ' room' . ($total === 1 ? '' : 's') . ' match your filters');
 ?>
 
-<!-- Search hero -->
+
 <section class="hero mb-3" style="padding:32px 34px">
   <span class="blur-shape blur-a" aria-hidden="true"></span>
   <span class="blur-shape blur-b" aria-hidden="true"></span>
@@ -197,7 +197,7 @@ page_header('Find a Room', 'search-rooms', $total . ' room' . ($total === 1 ? ''
   </div>
 </section>
 
-<!-- Results -->
+
 <?php if (!$rows): ?>
   <div class="card">
     <div class="empty">
@@ -260,7 +260,7 @@ page_header('Find a Room', 'search-rooms', $total . ' room' . ($total === 1 ? ''
     <?php endforeach; ?>
   </div>
 
-  <!-- Pagination -->
+  
   <?php if ($pages > 1): ?>
     <nav class="row mt-3" style="justify-content:center;gap:6px" aria-label="Pagination">
       <?php if ($page > 1): ?>

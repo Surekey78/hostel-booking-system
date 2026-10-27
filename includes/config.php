@@ -1,23 +1,23 @@
 <?php
-/**
- * config.php - Database connection + application constants
- * Hostel Room Booking System (PHP + MySQL + mysqli)
- */
+
+
+
+
 
 declare(strict_types=1);
 
-// ----------------------------- DB credentials -----------------------------
+
 define('DB_HOST', '127.0.0.1');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'hostel_booking');
 
-// ----------------------------- App constants ------------------------------
+
 define('APP_NAME', 'HostelEase');
 define('APP_TAGLINE', 'Hostel Room Booking System');
-define('BASE_URL', '');                        // relative paths -> works on any host/port
-define('CURRENCY', "\u{20B1}");              // Peso sign (UTF-8)
-define('MAX_UPLOAD_BYTES', 3 * 1024 * 1024);   // 3 MB
+define('BASE_URL', '');                        
+define('CURRENCY', "\u{20B1}");              
+define('MAX_UPLOAD_BYTES', 3 * 1024 * 1024);   
 define('UPLOAD_DIR', __DIR__ . '/../uploads/documents');
 define('INTAKE_PERIODS', [
     'Semester 1, 2026/2027',
@@ -25,7 +25,7 @@ define('INTAKE_PERIODS', [
     'Summer Term 2027',
 ]);
 
-// ----------------------------- Session bootstrap --------------------------
+
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'lifetime' => 0,
@@ -37,8 +37,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// ----------------------------- mysqli connection --------------------------
-/** Global connection handle created once per request. */
+
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {

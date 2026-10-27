@@ -1,11 +1,11 @@
 <?php
-/**
- * admin/rooms.php - Room inventory: add, edit, change status, delete, floor plan view.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 
-// ---------------- Actions ----------------
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? '';
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('admin/rooms.php');
 }
 
-// ---------------- Filters ----------------
+
 $hid    = get_int('hostel');
 $tid    = get_int('type');
 $status = safe_choice(get_str('status'), ['', 'available', 'full', 'maintenance', 'blocked'], '');
@@ -156,7 +156,7 @@ page_header('Rooms & Blocks', 'rooms', 'Room inventory, status and floor plans',
 <div class="grid" style="grid-template-columns:<?= (get_int('new') || $editing) ? 'minmax(0,380px) minmax(0,1fr)' : 'minmax(0,1fr)' ?>;gap:24px;align-items:start">
 
 <?php if (get_int('new') || $editing): ?>
-  <!-- Add / edit form -->
+  
   <div class="card card-pad-lg" style="position:sticky;top:96px">
     <div class="card-header">
       <div>
@@ -215,7 +215,7 @@ page_header('Rooms & Blocks', 'rooms', 'Room inventory, status and floor plans',
 <?php endif; ?>
 
 <div class="stack">
-  <!-- Filters -->
+  
   <form method="get" action="rooms.php" class="card">
     <input type="hidden" name="view" value="<?= e($view) ?>">
     <div class="filter-bar">
@@ -272,7 +272,7 @@ page_header('Rooms & Blocks', 'rooms', 'Room inventory, status and floor plans',
     </div></div>
 
   <?php elseif ($view === 'plan'): ?>
-    <!-- Floor plan view grouped by block + floor -->
+    
     <?php
     $grouped = [];
     foreach ($rooms as $r) {
@@ -307,7 +307,7 @@ page_header('Rooms & Blocks', 'rooms', 'Room inventory, status and floor plans',
     <?php endforeach; ?>
 
   <?php else: ?>
-    <!-- Table view with bulk actions -->
+    
     <form method="post" action="rooms.php" id="rooms-form">
       <?= csrf_field() ?>
       <div class="card mb-2" style="padding:14px 18px">

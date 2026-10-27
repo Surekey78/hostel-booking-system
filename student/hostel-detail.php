@@ -1,7 +1,7 @@
 <?php
-/**
- * student/hostel-detail.php - Single hostel: description, facilities, rooms, vacancy.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_student();
 
@@ -26,7 +26,7 @@ $rooms = db_all(
 );
 
 $filterType = get_int('type');
-$filterOnly = get_str('only');            // 'vacant'
+$filterOnly = get_str('only');            
 if ($filterType > 0) {
     $rooms = array_values(array_filter($rooms, fn($r) => (int)$r['room_type_id'] === $filterType));
 }
@@ -75,7 +75,7 @@ page_header(e($hostel['name']), 'hostels', e($hostel['block_code']) . ' &middot;
 </section>
 
 <div class="grid" style="grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start">
-  <!-- Rooms -->
+  
   <div class="stack">
     <div class="card">
       <div class="card-header">
@@ -154,7 +154,7 @@ page_header(e($hostel['name']), 'hostels', e($hostel['block_code']) . ' &middot;
     </div>
   </div>
 
-  <!-- Sidebar -->
+  
   <div class="stack">
     <div class="card">
       <h3 class="card-title mb-2">Rates &amp; vacancy</h3>

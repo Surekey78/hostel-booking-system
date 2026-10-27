@@ -1,12 +1,12 @@
 <?php
-/**
- * database/seed.php  -  Run from CLI to populate the database with demo data.
- *
- *   php database/seed.php
- *
- * It writes database/seed_data.sql (plain SQL with real bcrypt hashes) and
- * also applies it directly to the configured database.
- */
+
+
+
+
+
+
+
+
 
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ function q(?string $s): string
     return $s === null ? 'NULL' : "'" . addslashes($s) . "'";
 }
 
-/* ------------------------------------------------------------------ users */
+
 $adminHash   = password_hash('Admin@123', PASSWORD_DEFAULT);
 $studentHash = password_hash('Student@123', PASSWORD_DEFAULT);
 
@@ -71,7 +71,7 @@ foreach ($students as $s) {
 $out[] = implode(",\n", $rows) . ';';
 $out[] = '';
 
-/* --------------------------------------------------------------- hostels */
+
 $hostels = [
     ['Narra Hall',       'BLK-A', 'North Campus, near the Main Library', 'female',
      'Wi-Fi, Air Conditioning, Study Lounge, 24/7 Security, Hot Water, Laundry Room',
@@ -103,7 +103,7 @@ foreach ($hostels as $h) {
 $out[] = implode(",\n", $rows) . ';';
 $out[] = '';
 
-/* ------------------------------------------------------------ room types */
+
 $types = [
     ['Single Deluxe', 1, 18500.00, 'Air Conditioning, Private Bathroom, Study Desk, Wardrobe, Wi-Fi', 'Private room with an ensuite bathroom, a full-size desk and ample storage — ideal for postgraduate students.'],
     ['Twin Sharing',  2, 12800.00, 'Air Conditioning, Shared Bathroom, Study Desk, Wardrobe, Wi-Fi', 'Two single beds with individual study desks and a shared ensuite bathroom.'],
@@ -123,8 +123,8 @@ foreach ($types as $t) {
 $out[] = implode(",\n", $rows) . ';';
 $out[] = '';
 
-/* ----------------------------------------------------------------- rooms */
-// layout: hostel_id => [room_type_id => [count, start_no, floor_span]]
+
+
 $layout = [
     1 => [1 => [8, 101, 4], 2 => [10, 201, 4], 4 => [6, 301, 3]],
     2 => [1 => [6, 101, 3], 2 => [12, 201, 4], 3 => [8, 301, 4]],
@@ -136,7 +136,7 @@ $out[] = '-- --------------------------------------------------------------- roo
 $out[] = 'INSERT INTO rooms (hostel_id, room_type_id, room_number, floor, occupied, status) VALUES';
 $rows = [];
 $rid  = 1;
-$roomIndex = []; // "$hostel:$type" => [room ids]
+$roomIndex = []; 
 foreach ($layout as $hostelId => $byType) {
     foreach ($byType as $typeId => [$count, $startNo, $floors]) {
         $roomIndex["$hostelId:$typeId"] = [];
@@ -152,8 +152,8 @@ foreach ($layout as $hostelId => $byType) {
 $out[] = implode(",\n", $rows) . ';';
 $out[] = '';
 
-/* -------------------------------------------------------------- bookings */
-// [student_id, hostel_id, room_type_id, intake, status, days_ago, request]
+
+
 $bookingPlan = [
     [3, 1, 2, 'Semester 1, 2026/2027', 'assigned', 21, 'Prefer a lower floor if possible; I have a knee injury.'],
     [5, 1, 1, 'Semester 1, 2026/2027', 'assigned', 20, 'Nursing student on night rotations — a quiet room would help.'],
@@ -193,9 +193,9 @@ foreach ($bookingPlan as $i => [$studentId, $hostelId, $typeId, $intake, $status
 $out[] = implode(",\n", $rows) . ';';
 $out[] = '';
 
-/* ----------------------------------------------------------- assignments */
-// Distribute the assigned bookings into real rooms so occupancy adds up.
-$usedBeds   = [];   // room_id => occupied count
+
+
+$usedBeds   = [];   
 $assignRows = [];
 $aid = 1;
 $capacityByType = [1 => 1, 2 => 2, 3 => 3, 4 => 4];
@@ -231,12 +231,12 @@ if ($assignRows) {
     $out[] = '';
 }
 
-/* --------------------------------------------------------- notifications */
+
 $out[] = '-- ------------------------------------------------------- notifications';
 $notifRows = [];
 $nid = 1;
 $notifPlan = [
-    // [user_id, title, message, type, link, days_ago]
+    
     [1, 'New student registered', 'Sofia Ramos Delgado (2026-00418) created a student account.', 'info', 'admin/students.php', 1],
     [1, 'Application awaiting review', 'Rafael Ocampo Nuñez submitted application HB-' . date('Y') . '-00008 for Ipil Court.', 'warning', 'admin/applications.php', 2],
     [1, 'Application awaiting review', 'Kevin Alcantara Yu submitted application HB-' . date('Y') . '-00005 for Acacia Hall.', 'warning', 'admin/applications.php', 3],
@@ -262,12 +262,12 @@ $out[] = '';
 
 $sql = implode("\n", $out);
 
-// Write the .sql artefact
+
 $sqlPath = __DIR__ . '/seed_data.sql';
 file_put_contents($sqlPath, $sql);
 echo "Written: $sqlPath (" . strlen($sql) . " bytes)\n";
 
-// Apply it straight to the live database
+
 if (mysqli_multi_query($conn, $sql)) {
     do {
         if ($res = mysqli_store_result($conn)) {
@@ -280,7 +280,7 @@ if (mysqli_multi_query($conn, $sql)) {
     exit(1);
 }
 
-// Quick verification
+
 foreach (['users', 'hostels', 'room_types', 'rooms', 'bookings', 'assignments', 'notifications'] as $t) {
     $c = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) c FROM $t"))['c'];
     printf("  %-14s %s rows\n", $t, $c);

@@ -1,8 +1,4 @@
-/* =====================================================================
-   Embedded Roboto (latin) — Material You canonical typeface.
-   Self-hosted as base64 so the UI renders identically offline / in a
-   sandboxed preview with no network access. Weights: 400, 500, 700.
-   ===================================================================== */
+
 
 @font-face {
   font-family: 'Roboto';

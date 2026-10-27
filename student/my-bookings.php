@@ -1,12 +1,12 @@
 <?php
-/**
- * student/my-bookings.php - Track all applications and their status.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me  = require_student();
 $uid = (int)$me['id'];
 
-// ---- Handle cancellation ----
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'cancel') {
     verify_csrf();
     $bid = (int)($_POST['booking_id'] ?? 0);
@@ -69,7 +69,7 @@ page_header('My Applications', 'my-bookings', (int)$counts['total'] . ' applicat
 ]);
 ?>
 
-<!-- Status filter chips -->
+
 <div class="card mb-3">
   <div class="row wrap" style="gap:8px" data-chip-group>
     <span class="tiny" style="margin-right:4px">Filter:</span>

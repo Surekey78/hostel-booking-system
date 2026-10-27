@@ -1,7 +1,7 @@
 <?php
-/**
- * admin/hostels.php - Manage hostel blocks (create, edit, activate/deactivate).
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 

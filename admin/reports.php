@@ -1,8 +1,8 @@
 <?php
-/**
- * admin/reports.php - Vacancy, occupancy, booking and accommodation reports
- *                     with CSV export and a print-friendly layout.
- */
+
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 
@@ -19,7 +19,7 @@ $titles = [
     'accommodation' => ['Accommodation Report', 'Current residents and their room assignments'],
 ];
 
-/* ---------------- Data per report ---------------- */
+
 $data = [];
 $headers = [];
 
@@ -73,7 +73,7 @@ if ($report === 'vacancy') {
                 'hostel_name' => 'Hostel', 'block_code' => 'Block', 'room_type_name' => 'Room type', 'price' => 'Price',
                 'intake_period' => 'Intake', 'status' => 'Status', 'room_number' => 'Room', 'created_at' => 'Submitted'];
 
-} else { // accommodation
+} else { 
     $where = ["a.status = 'active'"];
     $types = '';
     $params = [];
@@ -104,7 +104,7 @@ if (get_str('export') === 'csv') {
     csv_export($report . '-report-' . date('Ymd-His') . '.csv', $data, $headers);
 }
 
-/* ---------------- Summary numbers ---------------- */
+
 $kpi = db_one(
     $conn,
     "SELECT (SELECT COALESCE(SUM(rt.capacity),0) FROM rooms r JOIN room_types rt ON rt.id=r.room_type_id) beds,
@@ -124,7 +124,7 @@ page_header('Reports', 'reports', e($titles[$report][1]), [
 ]);
 ?>
 
-<!-- Report picker -->
+
 <div class="card mb-3">
   <div class="tabs no-print">
     <?php foreach ($titles as $key => [$label, $sub]): ?>
@@ -172,7 +172,7 @@ page_header('Reports', 'reports', e($titles[$report][1]), [
   </form>
 </div>
 
-<!-- Report header (print) -->
+
 <div class="card mb-3" id="print-head">
   <div class="row-between wrap" style="gap:16px">
     <div>
@@ -190,7 +190,7 @@ page_header('Reports', 'reports', e($titles[$report][1]), [
   </div>
 </div>
 
-<!-- Summary tiles -->
+
 <div class="grid g-4 mb-3">
   <?php
   $tiles = [
@@ -209,7 +209,7 @@ page_header('Reports', 'reports', e($titles[$report][1]), [
 </div>
 
 <?php if ($report === 'occupancy'): ?>
-  <!-- Occupancy visual -->
+  
   <div class="grid g-2 mb-3">
     <div class="card">
       <h3 class="card-title mb-2">Occupancy by block</h3>
@@ -288,7 +288,7 @@ page_header('Reports', 'reports', e($titles[$report][1]), [
   </div>
 <?php endif; ?>
 
-<!-- Data table -->
+
 <div class="card" style="padding:0;overflow:hidden">
   <div class="card-header" style="padding:20px 24px 0">
     <div>

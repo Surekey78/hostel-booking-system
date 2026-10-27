@@ -1,7 +1,7 @@
 <?php
-/**
- * admin/room-types.php - Manage room types (capacity, price, facilities).
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 

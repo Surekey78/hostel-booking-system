@@ -1,7 +1,7 @@
 <?php
-/**
- * student/my-booking.php - Full application record: timeline, documents, remarks.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me  = require_student();
 $uid = (int)$me['id'];
@@ -29,7 +29,7 @@ if (!$b) {
     redirect('student/my-bookings.php');
 }
 
-// ---------------- POST actions ----------------
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? '';
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $docs = db_all($conn, 'SELECT * FROM documents WHERE booking_id = ? ORDER BY created_at DESC', 'i', [(int)$b['id']]);
 $notifs = db_all($conn, 'SELECT * FROM notifications WHERE user_id = ? AND message LIKE ? ORDER BY created_at DESC LIMIT 8', 'is', [$uid, '%' . $b['reference_no'] . '%']);
 
-// Timeline model
+
 $steps = [
     ['Submitted',      fmt_datetime($b['created_at']),                    true],
     ['Under review',   $b['processed_at'] ? fmt_datetime($b['processed_at']) : 'Awaiting hostel office', in_array($b['status'], ['pending'], true) ? 'current' : true],
@@ -101,7 +101,7 @@ page_header('Application ' . e($b['reference_no']), 'my-bookings', e($b['hostel_
 
 <div class="grid" style="grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start">
   <div class="stack">
-    <!-- Summary -->
+    
     <div class="card card-pad-lg">
       <div class="card-header">
         <div>
@@ -161,7 +161,7 @@ page_header('Application ' . e($b['reference_no']), 'my-bookings', e($b['hostel_
       </div>
     </div>
 
-    <!-- Documents -->
+    
     <div class="card card-pad-lg">
       <div class="card-header">
         <div>
@@ -229,7 +229,7 @@ page_header('Application ' . e($b['reference_no']), 'my-bookings', e($b['hostel_
     </div>
   </div>
 
-  <!-- Sidebar: timeline + activity -->
+  
   <aside class="stack" style="position:sticky;top:96px">
     <div class="card">
       <h3 class="card-title mb-2">Application progress</h3>

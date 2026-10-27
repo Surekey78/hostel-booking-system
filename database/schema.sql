@@ -1,13 +1,3 @@
--- =====================================================================
---  HOSTEL ROOM BOOKING SYSTEM - Database Schema
---  Engine : MySQL / MariaDB  (InnoDB, utf8mb4)
---  Access : PHP mysqli (procedural + prepared statements)
--- =====================================================================
---  Creates the database itself, so a bare import is all you need:
---      mysql -u root -p < schema.sql
---  (On shared hosting where the DB already exists, delete these two
---   statements or keep them - IF NOT EXISTS makes the import idempotent.)
--- =====================================================================
 CREATE DATABASE IF NOT EXISTS hostel_booking
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
@@ -26,20 +16,17 @@ DROP TABLE IF EXISTS users;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
--- ---------------------------------------------------------------------
--- users : students + hostel administrators
--- ---------------------------------------------------------------------
 CREATE TABLE users (
   id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
   role          ENUM('student','admin') NOT NULL DEFAULT 'student',
-  student_id    VARCHAR(20)  DEFAULT NULL,          -- matric / registration no.
+  student_id    VARCHAR(20)  DEFAULT NULL,
   full_name     VARCHAR(120) NOT NULL,
   email         VARCHAR(150) NOT NULL,
   phone         VARCHAR(25)  DEFAULT NULL,
   password_hash VARCHAR(255) NOT NULL,
   gender        ENUM('male','female','other') DEFAULT NULL,
-  programme     VARCHAR(120) DEFAULT NULL,          -- course of study
-  year_level    VARCHAR(20)  DEFAULT NULL,          -- e.g. "1st Year"
+  programme     VARCHAR(120) DEFAULT NULL,
+  year_level    VARCHAR(20)  DEFAULT NULL,
   address       VARCHAR(255) DEFAULT NULL,
   emergency_contact_name  VARCHAR(120) DEFAULT NULL,
   emergency_contact_phone VARCHAR(25)  DEFAULT NULL,
@@ -52,16 +39,13 @@ CREATE TABLE users (
   KEY idx_users_role (role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- hostels : accommodation blocks
--- ---------------------------------------------------------------------
 CREATE TABLE hostels (
   id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
   name         VARCHAR(120) NOT NULL,
-  block_code   VARCHAR(20)  NOT NULL,               -- e.g. "BLK-A"
+  block_code   VARCHAR(20)  NOT NULL,
   location     VARCHAR(180) DEFAULT NULL,
   description  TEXT,
-  facilities   VARCHAR(500) DEFAULT NULL,           -- comma separated
+  facilities   VARCHAR(500) DEFAULT NULL,
   warden_name  VARCHAR(120) DEFAULT NULL,
   warden_phone VARCHAR(25)  DEFAULT NULL,
   gender_policy ENUM('male','female','mixed') NOT NULL DEFAULT 'mixed',
@@ -72,14 +56,11 @@ CREATE TABLE hostels (
   UNIQUE KEY uq_hostel_block (block_code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- room_types : categories that carry price + capacity
--- ---------------------------------------------------------------------
 CREATE TABLE room_types (
   id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  name        VARCHAR(80) NOT NULL,                 -- Single / Double / Quad ...
-  capacity    TINYINT UNSIGNED NOT NULL DEFAULT 1,  -- beds per room
-  price       DECIMAL(10,2) NOT NULL DEFAULT 0.00,  -- per semester
+  name        VARCHAR(80) NOT NULL,
+  capacity    TINYINT UNSIGNED NOT NULL DEFAULT 1,
+  price       DECIMAL(10,2) NOT NULL DEFAULT 0.00,
   facilities  VARCHAR(500) DEFAULT NULL,
   description VARCHAR(500) DEFAULT NULL,
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -87,16 +68,13 @@ CREATE TABLE room_types (
   UNIQUE KEY uq_room_type_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- rooms : physical rooms inside a hostel block
--- ---------------------------------------------------------------------
 CREATE TABLE rooms (
   id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
   hostel_id   INT UNSIGNED NOT NULL,
   room_type_id INT UNSIGNED NOT NULL,
   room_number VARCHAR(20) NOT NULL,
   floor       TINYINT NOT NULL DEFAULT 1,
-  occupied    TINYINT UNSIGNED NOT NULL DEFAULT 0,  -- beds currently taken
+  occupied    TINYINT UNSIGNED NOT NULL DEFAULT 0,
   status      ENUM('available','full','maintenance','blocked') NOT NULL DEFAULT 'available',
   created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -106,16 +84,13 @@ CREATE TABLE rooms (
   CONSTRAINT fk_rooms_type   FOREIGN KEY (room_type_id) REFERENCES room_types(id) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- bookings : applications submitted by students
--- ---------------------------------------------------------------------
 CREATE TABLE bookings (
   id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  reference_no    VARCHAR(25) NOT NULL,             -- HB-2026-00001
-  student_id      INT UNSIGNED NOT NULL,            -- -> users.id
+  reference_no    VARCHAR(25) NOT NULL,
+  student_id      INT UNSIGNED NOT NULL,
   hostel_id       INT UNSIGNED NOT NULL,
   room_type_id    INT UNSIGNED NOT NULL,
-  intake_period   VARCHAR(40) NOT NULL,             -- e.g. "Semester 1, 2026/2027"
+  intake_period   VARCHAR(40) NOT NULL,
   checkin_date    DATE DEFAULT NULL,
   checkout_date   DATE DEFAULT NULL,
   roommates       TINYINT UNSIGNED NOT NULL DEFAULT 0,
@@ -123,7 +98,7 @@ CREATE TABLE bookings (
   status          ENUM('pending','approved','rejected','assigned','cancelled','checked_out')
                   NOT NULL DEFAULT 'pending',
   admin_remarks   TEXT,
-  processed_by    INT UNSIGNED DEFAULT NULL,        -- -> users.id (admin)
+  processed_by    INT UNSIGNED DEFAULT NULL,
   processed_at    DATETIME DEFAULT NULL,
   created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -138,9 +113,6 @@ CREATE TABLE bookings (
   CONSTRAINT fk_booking_admin   FOREIGN KEY (processed_by) REFERENCES users(id)      ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- assignments : approved applications converted into room records
--- ---------------------------------------------------------------------
 CREATE TABLE assignments (
   id            INT UNSIGNED NOT NULL AUTO_INCREMENT,
   booking_id    INT UNSIGNED NOT NULL,
@@ -162,14 +134,11 @@ CREATE TABLE assignments (
   CONSTRAINT fk_assign_admin   FOREIGN KEY (assigned_by) REFERENCES users(id)      ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- documents : supporting files uploaded against a booking
--- ---------------------------------------------------------------------
 CREATE TABLE documents (
   id           INT UNSIGNED NOT NULL AUTO_INCREMENT,
   booking_id   INT UNSIGNED NOT NULL,
   uploaded_by  INT UNSIGNED NOT NULL,
-  doc_type     VARCHAR(60) NOT NULL,                -- ID Card, Guarantor Letter...
+  doc_type     VARCHAR(60) NOT NULL,
   original_name VARCHAR(255) NOT NULL,
   stored_name  VARCHAR(255) NOT NULL,
   mime_type    VARCHAR(120) DEFAULT NULL,
@@ -181,9 +150,6 @@ CREATE TABLE documents (
   CONSTRAINT fk_doc_user    FOREIGN KEY (uploaded_by) REFERENCES users(id)    ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------------------------------------------------------------------
--- notifications : in-system status updates
--- ---------------------------------------------------------------------
 CREATE TABLE notifications (
   id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id    INT UNSIGNED NOT NULL,
@@ -198,9 +164,6 @@ CREATE TABLE notifications (
   CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =====================================================================
--- Helper views used by the reporting module
--- =====================================================================
 DROP VIEW IF EXISTS v_room_vacancy;
 CREATE VIEW v_room_vacancy AS
 SELECT r.id            AS room_id,

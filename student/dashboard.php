@@ -1,12 +1,12 @@
 <?php
-/**
- * student/dashboard.php - Student overview: status, vacancy, quick actions.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_student();
 $uid = (int)$me['id'];
 
-// --- headline numbers -------------------------------------------------------
+
 $counts = db_one(
     $conn,
     "SELECT
@@ -56,7 +56,7 @@ page_header('My Dashboard', 'dashboard', 'Welcome back, ' . e($me['full_name']),
 ]);
 ?>
 
-<!-- Greeting hero -->
+
 <section class="hero hero-primary mb-3 anim-rise">
   <span class="blur-shape" style="width:320px;height:320px;background:rgba(255,255,255,.18);top:-100px;right:-70px" aria-hidden="true"></span>
   <span class="blur-shape" style="width:240px;height:240px;background:rgba(232,222,248,.24);bottom:-110px;left:5%" aria-hidden="true"></span>
@@ -93,7 +93,7 @@ page_header('My Dashboard', 'dashboard', 'Welcome back, ' . e($me['full_name']),
   </div>
 </section>
 
-<!-- Stat tiles -->
+
 <div class="grid g-4 mb-3">
   <?php
   $tiles = [
@@ -114,7 +114,7 @@ page_header('My Dashboard', 'dashboard', 'Welcome back, ' . e($me['full_name']),
 </div>
 
 <div class="grid" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px;align-items:start">
-  <!-- Left column -->
+  
   <div class="stack">
     <?php if ($assignment): ?>
       <div class="card card-pad-lg" style="box-shadow:var(--e2)">
@@ -149,7 +149,7 @@ page_header('My Dashboard', 'dashboard', 'Welcome back, ' . e($me['full_name']),
       </div>
     <?php endif; ?>
 
-    <!-- Recent applications -->
+    
     <div class="card">
       <div class="card-header">
         <div>
@@ -189,7 +189,7 @@ page_header('My Dashboard', 'dashboard', 'Welcome back, ' . e($me['full_name']),
       <?php endif; ?>
     </div>
 
-    <!-- Where is space? -->
+    
     <div class="card">
       <div class="card-header">
         <div>
@@ -210,7 +210,7 @@ page_header('My Dashboard', 'dashboard', 'Welcome back, ' . e($me['full_name']),
     </div>
   </div>
 
-  <!-- Right column -->
+  
   <div class="stack">
     <div class="card">
       <h3 class="card-title mb-2">Quick actions</h3>

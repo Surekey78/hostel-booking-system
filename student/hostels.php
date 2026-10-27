@@ -1,7 +1,7 @@
 <?php
-/**
- * student/hostels.php - Browse hostels: facilities, room types, prices, vacancy.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_student();
 
@@ -30,7 +30,7 @@ page_header('Browse Hostels', 'hostels', number_format((float)total_vacancy()) .
 ?>
   <article class="card card-pad-lg anim-rise anim-rise-<?= ($i % 4) + 1 ?>" style="padding:0;overflow:hidden">
     <div style="display:grid;grid-template-columns:220px minmax(0,1fr);gap:0" class="hostel-row">
-      <!-- visual -->
+      
       <div class="hostel-visual" style="height:100%;min-height:220px;border-radius:0">
         <span class="glow" aria-hidden="true"></span>
         <?= icon('apartment', 'icon icon-xl') ?>
@@ -40,7 +40,7 @@ page_header('Browse Hostels', 'hostels', number_format((float)total_vacancy()) .
         </span>
       </div>
 
-      <!-- body -->
+      
       <div style="padding:26px 28px">
         <div class="row-between wrap mb-1">
           <div>
@@ -57,7 +57,7 @@ page_header('Browse Hostels', 'hostels', number_format((float)total_vacancy()) .
 
         <div class="row wrap mb-2" style="gap:6px"><?= facility_chips($full['facilities']) ?></div>
 
-        <!-- room type + price + vacancy matrix -->
+        
         <div class="table-wrap mb-2">
           <table class="data" style="min-width:520px">
             <thead>

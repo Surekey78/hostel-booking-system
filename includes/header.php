@@ -1,11 +1,11 @@
 <?php
-/**
- * header.php - Shared page chrome (navigation rail, top bar, notification sheet).
- * Usage:  require_once __DIR__.'/../includes/header.php';
- *         page_header('Dashboard', 'dashboard');
- *         ... content ...
- *         page_footer();
- */
+
+
+
+
+
+
+
 
 require_once __DIR__ . '/functions.php';
 
@@ -23,7 +23,7 @@ function initials(?string $name): string
     return $out ?: '?';
 }
 
-/** Navigation definition per role. */
+
 function nav_items(string $role): array
 {
     if ($role === 'admin') {
@@ -67,14 +67,14 @@ function pending_applications_count(): int
     return (int)($row['c'] ?? 0);
 }
 
-/**
- * Render everything above the page content.
- *
- * @param string      $title  Page title
- * @param string      $active Active nav key (file name without .php)
- * @param string      $subtitle Optional page subtitle
- * @param array       $actions Optional ['label'=>..,'href'=>..,'class'=>..,'icon'=>..]
- */
+
+
+
+
+
+
+
+
 function page_header(string $title, string $active = '', string $subtitle = '', array $actions = []): void
 {
     global $__USER;
@@ -97,7 +97,7 @@ function page_header(string $title, string $active = '', string $subtitle = '', 
 </head>
 <body>
 <div class="app">
-  <!-- ============ Navigation rail ============ -->
+  
   <aside class="rail" id="rail" aria-label="Main navigation">
     <div class="brand">
       <div class="brand-mark"><?= icon('apartment') ?></div>
@@ -111,8 +111,8 @@ function page_header(string $title, string $active = '', string $subtitle = '', 
       <div class="rail-section"><?= e($section) ?></div>
       <?php foreach ($items as $it):
           [$file, $ico, $label] = $it;
-          // "../x.php" in the nav table means a root-level page shared by both
-          // roles; anything else lives inside the role's own directory.
+          
+          
           $isRootPage = str_starts_with($file, '../');
           $file = preg_replace('#^(\.\./)+#', '', $file);
           $badge = $it[3] ?? null;
@@ -144,7 +144,7 @@ function page_header(string $title, string $active = '', string $subtitle = '', 
     </div>
   </aside>
 
-  <!-- ============ Main column ============ -->
+  
   <div class="main">
     <header class="topbar">
       <button class="icon-btn menu-btn" data-rail-toggle aria-label="Open navigation menu"><?= icon('menu') ?></button>
@@ -174,7 +174,7 @@ function page_header(string $title, string $active = '', string $subtitle = '', 
     <?php
 }
 
-/** Close the page: footer, notification sheet, scrim, scripts. */
+
 function page_footer(string $fab = ''): void
 {
     global $__USER;
@@ -197,10 +197,10 @@ function page_footer(string $fab = ''): void
         <span>PHP &middot; MySQL &middot; mysqli &middot; Material Design 3</span>
       </div>
     </footer>
-  </div><!-- /.main -->
-</div><!-- /.app -->
+  </div>
+</div>
 
-<!-- ============ Notification side sheet ============ -->
+
 <div class="notif-panel" data-notif-panel aria-label="Notifications">
   <div class="notif-head">
     <div>

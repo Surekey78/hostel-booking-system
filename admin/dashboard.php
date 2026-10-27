@@ -1,7 +1,7 @@
 <?php
-/**
- * admin/dashboard.php - Administrator overview: occupancy, queue, recent activity.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 
@@ -84,7 +84,7 @@ page_header('Dashboard', 'dashboard', 'Hostel administration console', [
 ]);
 ?>
 
-<!-- KPI hero -->
+
 <section class="hero hero-primary mb-3 anim-rise" style="padding:36px 40px">
   <span class="blur-shape" style="width:320px;height:320px;background:rgba(255,255,255,.18);top:-110px;right:-70px" aria-hidden="true"></span>
   <span class="blur-shape" style="width:250px;height:250px;background:rgba(232,222,248,.24);bottom:-110px;left:8%" aria-hidden="true"></span>
@@ -120,7 +120,7 @@ page_header('Dashboard', 'dashboard', 'Hostel administration console', [
   </div>
 </section>
 
-<!-- KPI tiles -->
+
 <div class="grid g-4 mb-3">
   <?php
   $tiles = [
@@ -146,7 +146,7 @@ page_header('Dashboard', 'dashboard', 'Hostel administration console', [
 
 <div class="grid" style="grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:24px;align-items:start">
   <div class="stack">
-    <!-- Pending queue -->
+    
     <div class="card">
       <div class="card-header">
         <div>
@@ -183,7 +183,7 @@ page_header('Dashboard', 'dashboard', 'Hostel administration console', [
       <?php endif; ?>
     </div>
 
-    <!-- Occupancy by block -->
+    
     <div class="card">
       <div class="card-header">
         <div>
@@ -202,7 +202,7 @@ page_header('Dashboard', 'dashboard', 'Hostel administration console', [
       <?php endforeach; ?>
     </div>
 
-    <!-- Room type performance -->
+    
     <div class="card">
       <div class="card-header">
         <div>
@@ -231,7 +231,7 @@ page_header('Dashboard', 'dashboard', 'Hostel administration console', [
     </div>
   </div>
 
-  <!-- Right column -->
+  
   <div class="stack">
     <div class="card">
       <h3 class="card-title mb-2">Application status mix</h3>

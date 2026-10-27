@@ -1,8 +1,8 @@
-/* HostelEase — Material You micro-interactions (vanilla JS, no dependencies) */
+
 (function () {
   'use strict';
 
-  /* ---- Mobile navigation rail ---- */
+  
   var railToggle = document.querySelector('[data-rail-toggle]');
   var scrim = document.querySelector('[data-scrim]');
 
@@ -21,7 +21,7 @@
     if (e.key === 'Escape') { closeRail(); closeNotifs(); closeModal(); }
   });
 
-  /* ---- Notification side sheet ---- */
+  
   var panel = document.querySelector('[data-notif-panel]');
   var notifBtn = document.querySelector('[data-notif-toggle]');
   function openNotifs() { if (panel) { panel.classList.add('open'); if (scrim) scrim.classList.add('show'); } }
@@ -31,7 +31,7 @@
     panel && panel.classList.contains('open') ? closeNotifs() : openNotifs();
   });
 
-  /* ---- Modal ---- */
+  
   var modal = document.querySelector('[data-modal]');
   function openModal() { if (modal) { modal.classList.add('open'); if (scrim) scrim.classList.add('show'); document.body.style.overflow = 'hidden'; } }
   function closeModal() {
@@ -52,14 +52,14 @@
   document.querySelectorAll('[data-close-modal]').forEach(function (b) { b.addEventListener('click', closeModal); });
   if (modal) modal.addEventListener('click', function (e) { if (e.target.classList.contains('modal-backdrop')) closeModal(); });
 
-  /* ---- Confirm dialogs for destructive actions ---- */
+  
   document.querySelectorAll('[data-confirm]').forEach(function (el) {
     el.addEventListener('click', function (e) {
       if (!window.confirm(el.getAttribute('data-confirm'))) { e.preventDefault(); e.stopImmediatePropagation(); }
     });
   });
 
-  /* ---- Password visibility toggle ---- */
+  
   document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var input = document.getElementById(btn.getAttribute('data-toggle-password'));
@@ -71,7 +71,7 @@
     });
   });
 
-  /* ---- Auto-dismiss flash alerts ---- */
+  
   setTimeout(function () {
     document.querySelectorAll('.flash-stack .alert').forEach(function (a) {
       a.style.transition = 'opacity .4s cubic-bezier(0.2,0,0,1), transform .4s cubic-bezier(0.2,0,0,1)';
@@ -81,12 +81,12 @@
     });
   }, 6000);
 
-  /* ---- Auto-submit filter forms when a select changes ---- */
+  
   document.querySelectorAll('[data-auto-submit]').forEach(function (el) {
     el.addEventListener('change', function () { el.closest('form').submit(); });
   });
 
-  /* ---- Selectable chips (visual only) ---- */
+  
   document.querySelectorAll('[data-chip-group]').forEach(function (group) {
     group.addEventListener('click', function (e) {
       var chip = e.target.closest('.chip-selectable');
@@ -96,7 +96,7 @@
     });
   });
 
-  /* ---- Ripple / press feedback for cards ---- */
+  
   document.querySelectorAll('.card-hover, .room-card, .notif-item').forEach(function (el) {
     el.addEventListener('pointerdown', function () { el.style.transform = 'scale(.985)'; });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) {
@@ -104,7 +104,7 @@
     });
   });
 
-  /* ---- Live search box: submit on Enter, debounce on typing ---- */
+  
   var liveSearch = document.querySelector('[data-live-search]');
   if (liveSearch) {
     var timer = null;
@@ -114,7 +114,7 @@
     });
   }
 
-  /* ---- Animate stat counters on first paint ---- */
+  
   document.querySelectorAll('[data-count]').forEach(function (el) {
     var target = parseFloat(el.getAttribute('data-count'));
     if (isNaN(target)) return;
@@ -130,7 +130,7 @@
     requestAnimationFrame(step);
   });
 
-  /* ---- Room assignment: keep bed preview in sync ---- */
+  
   var roomSelect = document.querySelector('[data-room-select]');
   if (roomSelect) {
     var info = document.querySelector('[data-room-info]');

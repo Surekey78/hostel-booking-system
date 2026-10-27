@@ -1,7 +1,7 @@
 <?php
-/**
- * login.php - Student & administrator sign in.
- */
+
+
+
 require_once __DIR__ . '/includes/public_header.php';
 
 if (is_logged_in()) {
@@ -45,7 +45,7 @@ public_head('Sign in');
 ?>
 
 <div class="auth-wrap">
-  <!-- Decorative panel -->
+  
   <aside class="auth-side">
     <span class="blur-shape" style="width:340px;height:340px;background:rgba(255,255,255,.16);top:-110px;right:-90px" aria-hidden="true"></span>
     <span class="blur-shape" style="width:280px;height:280px;background:rgba(232,222,248,.22);bottom:-100px;left:-70px" aria-hidden="true"></span>
@@ -81,7 +81,7 @@ public_head('Sign in');
     </div>
   </aside>
 
-  <!-- Form panel -->
+  
   <section class="auth-panel">
     <div class="auth-card">
       <div class="row-between mb-3">

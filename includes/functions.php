@@ -1,33 +1,33 @@
 <?php
-/**
- * functions.php - Shared helpers: escaping, auth, CSRF, flash, notifications,
- *                 vacancy maths, uploads, pagination, report utilities.
- */
+
+
+
+
 
 declare(strict_types=1);
 
 require_once __DIR__ . '/config.php';
 
-/* =====================================================================
-   1. BASIC UTILITIES
-   ===================================================================== */
+
+
+
 
 function e(?string $value): string
 {
     return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
-/**
- * Redirect helper.
- *
- * The path is resolved against the current script's directory, and a redundant
- * directory prefix is stripped so that `redirect('student/apply.php')` works
- * whether it is called from the web root or from inside /student.
- */
+
+
+
+
+
+
+
 function redirect(string $path): never
 {
-    // Pages that live in the document root — always resolved from the root,
-    // never relative to /student or /admin.
+    
+    
     $rootPages = ['index.php', 'login.php', 'logout.php', 'register.php', 'profile.php', 'notifications.php', 'document.php'];
     if (in_array(explode('?', $path)[0], $rootPages, true)) {
         header('Location: ' . BASE_URL . '/' . ltrim($path, '/'));
@@ -66,7 +66,7 @@ function fmt_datetime(?string $dt): string
     return date('d M Y, g:i A', strtotime($dt));
 }
 
-/** "3 hours ago" style relative time. */
+
 function time_ago(?string $dt): string
 {
     if (!$dt) {
@@ -80,11 +80,11 @@ function time_ago(?string $dt): string
     return date('d M Y', strtotime($dt));
 }
 
-/**
- * URL prefix for the application root, relative to the *current* script.
- * Keeps asset and navigation links working at a domain root, inside a
- * subfolder (e.g. htdocs/hostel/ on XAMPP) and from /student or /admin.
- */
+
+
+
+
+
 function app_url(string $path = ''): string
 {
     static $prefix = null;
@@ -93,8 +93,8 @@ function app_url(string $path = ''): string
         if ($scriptDir === '' || $scriptDir === '.') {
             $prefix = rtrim(BASE_URL, '/') . '/';
         } else {
-            // $scriptDir is still rooted here (e.g. "/student" or "/hostel/admin"),
-            // so its slash count equals the number of directories to climb.
+            
+            
             $depth   = substr_count($scriptDir, '/');
             $baseDir = rtrim(BASE_URL, '/');
             $prefix  = ($baseDir !== '' ? $baseDir . '/' : '') . str_repeat('../', $depth);
@@ -103,9 +103,9 @@ function app_url(string $path = ''): string
     return $prefix . ltrim($path, '/');
 }
 
-/* =====================================================================
-   2. FLASH MESSAGES
-   ===================================================================== */
+
+
+
 
 function flash_set(string $type, string $message): void
 {
@@ -140,9 +140,9 @@ function icon_for(string $type): string
     };
 }
 
-/* =====================================================================
-   3. CSRF PROTECTION
-   ===================================================================== */
+
+
+
 
 function csrf_token(): string
 {
@@ -163,7 +163,7 @@ function verify_csrf(): void
     if (!is_string($sent) || !hash_equals(csrf_token(), $sent)) {
         http_response_code(419);
         flash_set('danger', 'Your session expired or the form token was invalid. Please try again.');
-        // Send the user back to the page they posted from (same-host paths only).
+        
         $back = 'index.php';
         $ref  = (string)($_SERVER['HTTP_REFERER'] ?? '');
         if ($ref !== '') {
@@ -177,9 +177,9 @@ function verify_csrf(): void
     }
 }
 
-/* =====================================================================
-   4. AUTHENTICATION & AUTHORISATION
-   ===================================================================== */
+
+
+
 
 function current_user(): ?array
 {
@@ -271,7 +271,7 @@ function logout_user(): void
     session_destroy();
 }
 
-/** Attempt sign-in; returns the user row or null. */
+
 function attempt_login(string $email, string $password): ?array
 {
     global $conn;
@@ -285,7 +285,7 @@ function attempt_login(string $email, string $password): ?array
         if ($user['status'] !== 'active') {
             return null;
         }
-        // Transparent rehash if the cost factor changed.
+        
         if (password_needs_rehash($user['password_hash'], PASSWORD_DEFAULT)) {
             $new = password_hash($password, PASSWORD_DEFAULT);
             $upd = mysqli_prepare($conn, 'UPDATE users SET password_hash = ? WHERE id = ?');
@@ -298,20 +298,20 @@ function attempt_login(string $email, string $password): ?array
     return null;
 }
 
-/* =====================================================================
-   5. NOTIFICATIONS
-   ===================================================================== */
+
+
+
 
 function notify(int $userId, string $title, string $message, string $type = 'info', ?string $link = null): void
 {
     global $conn;
     if ($userId <= 0) {
-        return;                       // nothing to notify
+        return;                       
     }
     $exists = db_one($conn, 'SELECT id FROM users WHERE id = ?', 'i', [$userId]);
     if (!$exists) {
         error_log("notify(): user $userId does not exist — notification '$title' skipped.");
-        return;                       // avoid a foreign-key failure breaking the request
+        return;                       
     }
     $stmt = mysqli_prepare(
         $conn,
@@ -342,9 +342,9 @@ function mark_notifications_read(int $userId): void
     mysqli_stmt_close($stmt);
 }
 
-/* =====================================================================
-   6. HOSTEL / ROOM / VACANCY LOGIC
-   ===================================================================== */
+
+
+
 
 function hostel_summary(int $hostelId): ?array
 {
@@ -371,7 +371,7 @@ function hostel_options(): array
     return $res ? mysqli_fetch_all($res, MYSQLI_ASSOC) : [];
 }
 
-/** Beds still free for a room type inside one hostel. */
+
 function vacancy_for(int $hostelId, int $roomTypeId): int
 {
     global $conn;
@@ -388,7 +388,7 @@ function vacancy_for(int $hostelId, int $roomTypeId): int
     return (int)($row['v'] ?? 0);
 }
 
-/** Total free beds across the whole system. */
+
 function total_vacancy(): int
 {
     global $conn;
@@ -402,7 +402,7 @@ function total_vacancy(): int
     return (int)($row['v'] ?? 0);
 }
 
-/** Pick the best (lowest number, has free bed) room for an assignment. */
+
 function find_free_room(int $hostelId, int $roomTypeId): ?array
 {
     global $conn;
@@ -422,10 +422,10 @@ function find_free_room(int $hostelId, int $roomTypeId): ?array
     return $room ?: null;
 }
 
-/**
- * Convert an approved booking into a room assignment (transactional).
- * Returns ['ok'=>bool,'message'=>string,'assignment'=>?array]
- */
+
+
+
+
 function assign_room(int $bookingId, ?int $roomId = null): array
 {
     global $conn;
@@ -433,8 +433,8 @@ function assign_room(int $bookingId, ?int $roomId = null): array
 
     mysqli_begin_transaction($conn);
     try {
-        // Lock the booking row for the duration of the transaction so two
-        // administrators can never assign the same bed at the same time.
+        
+        
         $lock = mysqli_prepare($conn, 'SELECT id, student_id, hostel_id, room_type_id, checkin_date, status, reference_no FROM bookings WHERE id = ? FOR UPDATE');
         mysqli_stmt_bind_param($lock, 'i', $bookingId);
         mysqli_stmt_execute($lock);
@@ -448,7 +448,7 @@ function assign_room(int $bookingId, ?int $roomId = null): array
             throw new RuntimeException('Only pending or approved applications can be assigned a room.');
         }
 
-        // Resolve room
+        
         if ($roomId === null) {
             $room = find_free_room((int)$booking['hostel_id'], (int)$booking['room_type_id']);
         } else {
@@ -476,13 +476,13 @@ function assign_room(int $bookingId, ?int $roomId = null): array
         $newStatus = $newOccupied >= (int)$room['capacity'] ? 'full' : 'available';
         $adminId = $admin['id'] ?? null;
 
-        // 1. Occupy the bed
+        
         $up = mysqli_prepare($conn, 'UPDATE rooms SET occupied = ?, status = ? WHERE id = ?');
         mysqli_stmt_bind_param($up, 'isi', $newOccupied, $newStatus, $room['id']);
         mysqli_stmt_execute($up);
         mysqli_stmt_close($up);
 
-        // 2. Create assignment record
+        
         $ins = mysqli_prepare(
             $conn,
             "INSERT INTO assignments (booking_id, room_id, bed_number, student_id, assigned_by, status, checkin_date)
@@ -494,7 +494,7 @@ function assign_room(int $bookingId, ?int $roomId = null): array
         $assignmentId = mysqli_insert_id($conn);
         mysqli_stmt_close($ins);
 
-        // 3. Move booking to assigned
+        
         $now = date('Y-m-d H:i:s');
         $st = 'assigned';
         $ub = mysqli_prepare($conn, 'UPDATE bookings SET status = ?, processed_by = ?, processed_at = ? WHERE id = ?');
@@ -504,7 +504,7 @@ function assign_room(int $bookingId, ?int $roomId = null): array
 
         mysqli_commit($conn);
 
-        // 4. Notify the student (outside the transaction, on a fresh statement)
+        
         $info = db_one($conn, 'SELECT reference_no FROM bookings WHERE id = ?', 'i', [$bookingId]);
         if ($info) {
             notify(
@@ -530,7 +530,7 @@ function assign_room(int $bookingId, ?int $roomId = null): array
     }
 }
 
-/** Release a bed (check-out / cancellation of an assigned booking). */
+
 function release_assignment(int $bookingId): array
 {
     global $conn;
@@ -579,7 +579,7 @@ function release_assignment(int $bookingId): array
     }
 }
 
-/** Next booking reference, e.g. HB-2026-00042 */
+
 function next_reference(): string
 {
     global $conn;
@@ -589,9 +589,9 @@ function next_reference(): string
     return sprintf('HB-%s-%05d', $year, ((int)$row['c']) + 1);
 }
 
-/* =====================================================================
-   7. FILE UPLOADS
-   ===================================================================== */
+
+
+
 
 function store_document(array $file, int $bookingId, string $docType, int $userId): array
 {
@@ -664,11 +664,11 @@ function human_filesize(int $bytes): string
     return round($bytes / 1048576, 2) . ' MB';
 }
 
-/* =====================================================================
-   8. UI HELPERS
-   ===================================================================== */
 
-/** Material Symbols-style inline SVG icon set (no external fonts needed). */
+
+
+
+
 function icon(string $name, string $class = 'icon'): string
 {
     $paths = [
@@ -725,7 +725,7 @@ function icon(string $name, string $class = 'icon'): string
     return '<svg class="' . e($class) . '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">' . $d . '</svg>';
 }
 
-/** Status chip for booking states. */
+
 function status_chip(string $status): string
 {
     $map = [
@@ -740,7 +740,7 @@ function status_chip(string $status): string
     return '<span class="chip ' . $cls . '"><span class="chip-dot"></span>' . e($label) . '</span>';
 }
 
-/** Split a comma separated facility list into chips. */
+
 function facility_chips(?string $facilities): string
 {
     if (!$facilities) return '';
@@ -767,7 +767,7 @@ function icon_for_facility(string $facility): string
     };
 }
 
-/** Render a vacancy progress bar. */
+
 function occupancy_bar(int $occupied, int $capacity): string
 {
     $capacity = max(1, $capacity);
@@ -777,11 +777,11 @@ function occupancy_bar(int $occupied, int $capacity): string
          . '<span class="bar-fill ' . $tone . '" style="width:' . $pct . '%"></span></div>';
 }
 
-/* =====================================================================
-   9. QUERY / TABLE HELPERS
-   ===================================================================== */
 
-/** Run a prepared SELECT and return all rows as assoc arrays. */
+
+
+
+
 function db_all(mysqli $conn, string $sql, string $types = '', array $params = []): array
 {
     $stmt = mysqli_prepare($conn, $sql);
@@ -797,14 +797,14 @@ function db_all(mysqli $conn, string $sql, string $types = '', array $params = [
     return $rows;
 }
 
-/** Run a prepared SELECT and return the first row (or null). */
+
 function db_one(mysqli $conn, string $sql, string $types = '', array $params = []): ?array
 {
     $rows = db_all($conn, $sql, $types, $params);
     return $rows[0] ?? null;
 }
 
-/** Run a prepared write statement; returns affected rows. */
+
 function db_exec(mysqli $conn, string $sql, string $types = '', array $params = []): int
 {
     $stmt = mysqli_prepare($conn, $sql);
@@ -817,7 +817,7 @@ function db_exec(mysqli $conn, string $sql, string $types = '', array $params = 
     return $affected;
 }
 
-/** Whitelist helper so user input can never inject an ORDER BY / column. */
+
 function safe_choice(string $value, array $allowed, string $default): string
 {
     return in_array($value, $allowed, true) ? $value : $default;
@@ -833,13 +833,13 @@ function get_str(string $key, string $default = ''): string
     return isset($_GET[$key]) && is_string($_GET[$key]) ? trim($_GET[$key]) : $default;
 }
 
-/** Export an associative-array result set as a CSV download. */
+
 function csv_export(string $filename, array $rows, array $headers): never
 {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     $out = fopen('php://output', 'w');
-    fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));   // UTF-8 BOM for Excel
+    fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));   
     fputcsv($out, $headers);
     foreach ($rows as $row) {
         $line = [];

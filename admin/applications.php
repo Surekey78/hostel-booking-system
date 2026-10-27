@@ -1,11 +1,11 @@
 <?php
-/**
- * admin/applications.php - Review applications: filter, approve, reject, assign, export.
- */
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 $me = require_admin();
 
-// ---------------- Actions ----------------
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? '';
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('admin/applications.php' . (isset($_POST['return_query']) ? '?' . $_POST['return_query'] : ''));
 }
 
-// ---------------- CSV export ----------------
+
 $status = safe_choice(get_str('status'), ['', 'pending', 'approved', 'assigned', 'rejected', 'cancelled', 'checked_out'], '');
 $q      = get_str('q');
 $hid    = get_int('hostel');
@@ -151,7 +151,7 @@ page_header('Applications', 'applications', 'Review, approve, reject and convert
 ]);
 ?>
 
-<!-- Status tabs -->
+
 <div class="card mb-3" style="padding:14px 18px">
   <div class="row wrap" style="gap:8px">
     <?php
@@ -170,7 +170,7 @@ page_header('Applications', 'applications', 'Review, approve, reject and convert
   </div>
 </div>
 
-<!-- Filters -->
+
 <form method="get" action="applications.php" class="card mb-3">
   <?php if ($status !== ''): ?><input type="hidden" name="status" value="<?= e($status) ?>"><?php endif; ?>
   <div class="filter-bar">
@@ -237,7 +237,7 @@ page_header('Applications', 'applications', 'Review, approve, reject and convert
   <?= csrf_field() ?>
   <input type="hidden" name="return_query" value="<?= e($queryBase) ?>">
 
-  <!-- Bulk bar -->
+  
   <div class="card mb-2" style="padding:14px 18px">
     <div class="row-between wrap" style="gap:12px">
       <div class="row wrap" style="gap:8px">
@@ -350,7 +350,7 @@ page_header('Applications', 'applications', 'Review, approve, reject and convert
   </div>
 </form>
 
-<!-- Individual release forms (outside the bulk form to avoid nesting) -->
+
 <?php foreach ($bookings as $b): if ($b['status'] !== 'assigned') continue; ?>
   <form method="post" action="applications.php" id="release-form-<?= (int)$b['id'] ?>" style="display:none">
     <?= csrf_field() ?>
@@ -360,7 +360,7 @@ page_header('Applications', 'applications', 'Review, approve, reject and convert
   </form>
 <?php endforeach; ?>
 
-<!-- Assign modal -->
+
 <div class="modal" data-modal id="assign-modal">
   <div class="modal-backdrop" data-close-modal></div>
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="assign-title">
